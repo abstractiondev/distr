@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2011 (http://www.altova.com) by Kalle Launiala (Citrus Solutions Oy) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="DistributionAbstraction">
+		<xs:annotation>
+			<xs:documentation>Abstraction Distribution.
+
+DRAFT</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Catalogue" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Abstraction catelogue.
+
+The root catalogues can and will link also to subcatalogues.
+
+Not all catalogues need to be accessed through the root clients, it is enough that the end-user client can access the catalogues.
+
+Any write-accessible client can update these private catalogues in their respective private repositories.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Location" type="LocationType" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Catalogue access locations - Git repositories with different protocol URIs possible.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Open">
+								<xs:annotation>
+									<xs:documentation>Open accessible abstractions.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Abstraction" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="Location" type="LocationType" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>Abstraction access locations - Git repositories with different protocol URIs possible.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="Categories" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Abstraction categories.
+
+To help in searches.</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="Category">
+																	<xs:complexType>
+																		<xs:attribute name="name" use="required"/>
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="Platforms" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Supported target platforms. 
+
+Currently free form, later on more controlled so that automatic categorizing and filtering can be applied properly.</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="Platform">
+																	<xs:complexType>
+																		<xs:attribute name="name" use="required"/>
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="DescriptionAndSamples" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>TODO: Design proper structure to include description, documentation and samples linking.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+												<xs:attribute name="name" use="required"/>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Controlled" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>TODO: Private abstractions that are only accessible on some of the end-developers.
+
+These probably get removed from here and are accessed through private catalogues instead.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Pending" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>TODO: Pending registrations.
+
+The pending area information is not trusted; the abstraction information is downloaded from the publicly accessible URI only.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="name" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="LocationType">
+		<xs:attribute name="uri" type="xs:anyURI" use="required"/>
+	</xs:complexType>
+</xs:schema>
