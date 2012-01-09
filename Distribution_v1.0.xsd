@@ -8,10 +8,10 @@
 DRAFT</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="Catalogue" maxOccurs="unbounded">
+			<xs:choice>
+				<xs:element name="Catalogue">
 					<xs:annotation>
-						<xs:documentation>Abstraction catelogue.
+						<xs:documentation>Abstraction catalogue.
 
 The root catalogues can and will link also to subcatalogues.
 
@@ -26,13 +26,18 @@ Any write-accessible client can update these private catalogues in their respect
 									<xs:documentation>Catalogue access locations - Git repositories with different protocol URIs possible.</xs:documentation>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="Open">
+							<xs:element name="Abstractions">
 								<xs:annotation>
 									<xs:documentation>Open accessible abstractions.</xs:documentation>
 								</xs:annotation>
 								<xs:complexType>
 									<xs:sequence>
 										<xs:element name="Abstraction" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>TBD later: 
+
+Abstraction can state that it is aware of certain catalogue by publishing separate CatalogueList.xml within it's root folder.</xs:documentation>
+											</xs:annotation>
 											<xs:complexType>
 												<xs:sequence>
 													<xs:element name="Location" type="LocationType" maxOccurs="unbounded">
@@ -40,17 +45,37 @@ Any write-accessible client can update these private catalogues in their respect
 															<xs:documentation>Abstraction access locations - Git repositories with different protocol URIs possible.</xs:documentation>
 														</xs:annotation>
 													</xs:element>
-													<xs:element name="Categories" minOccurs="0">
-														<xs:annotation>
-															<xs:documentation>Abstraction categories.
-
-To help in searches.</xs:documentation>
-														</xs:annotation>
+													<xs:element name="Metadata">
 														<xs:complexType>
 															<xs:sequence>
-																<xs:element name="Category" maxOccurs="unbounded">
+																<xs:element name="Categories" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Abstraction categories.
+
+To help in searches.</xs:documentation>
+																	</xs:annotation>
 																	<xs:complexType>
-																		<xs:attribute name="name" use="required"/>
+																		<xs:sequence>
+																			<xs:element name="Category" maxOccurs="unbounded">
+																				<xs:complexType>
+																					<xs:attribute name="name" use="required"/>
+																				</xs:complexType>
+																			</xs:element>
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+																<xs:element name="Custom" minOccurs="0">
+																	<xs:complexType>
+																		<xs:sequence>
+																			<xs:element name="CustomMetadata" maxOccurs="unbounded">
+																				<xs:complexType>
+																					<xs:sequence>
+																						<xs:element name="Value" type="xs:string"/>
+																					</xs:sequence>
+																					<xs:attribute name="name" type="xs:string" use="required"/>
+																				</xs:complexType>
+																			</xs:element>
+																		</xs:sequence>
 																	</xs:complexType>
 																</xs:element>
 															</xs:sequence>
@@ -126,25 +151,34 @@ Currently free form, later on more controlled so that automatic categorizing and
 									</xs:sequence>
 								</xs:complexType>
 							</xs:element>
-							<xs:element name="Controlled" minOccurs="0">
-								<xs:annotation>
-									<xs:documentation>TODO: Private abstractions that are only accessible on some of the end-developers.
+						</xs:sequence>
+						<xs:attribute name="name" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Subcatalogue">
+					<xs:annotation>
+						<xs:documentation>Implemented as git submodule.
 
-These probably get removed from here and are accessed through private catalogues instead.</xs:documentation>
-								</xs:annotation>
-							</xs:element>
-							<xs:element name="Pending" minOccurs="0">
-								<xs:annotation>
-									<xs:documentation>TODO: Pending registrations.
+Every subcatalogue is supposed to be within its own file. This is because subcatalogues can be added then simply adding new file to the forked distribution repository.
 
-The pending area information is not trusted; the abstraction information is downloaded from the publicly accessible URI only.</xs:documentation>
+Validation is made to ensure that the subcatalogue file name is exact match of the primary location of the subcatalogue git repository.
+
+This is done before the merge is accepted.
+
+TBD: Should the subcatalogue itself authorize its usage within otehr catalogues? Should it contain CatalogueList.xml as Abstractions may?</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Location" type="LocationType" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Catalogue access locations - Git repositories with different protocol URIs possible.</xs:documentation>
 								</xs:annotation>
 							</xs:element>
 						</xs:sequence>
 						<xs:attribute name="name" type="xs:string" use="required"/>
 					</xs:complexType>
 				</xs:element>
-			</xs:sequence>
+			</xs:choice>
 		</xs:complexType>
 	</xs:element>
 	<xs:complexType name="LocationType">
